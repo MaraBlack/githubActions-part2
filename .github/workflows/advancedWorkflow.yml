@@ -1,0 +1,30 @@
+name: first workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  firstJob:
+    runs-on: self-hosted
+    steps:
+      - name: firstJob script
+        shell: bash
+        run: echo "Hello World"
+      - name: Cache
+        uses: actions/cache@v4.3.0
+      - name: Print to Log
+        id: print-to-log
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: ${{ github.actor }} #$GITHUB_ACTOR
+      - name: time
+        run: |
+          echo "The time of the greeting was at ${{ steps.print-to-log.outputs.time }}"
+
+  secondJob:
+    runs-on: ubuntu-latest
+    #needs: firstJob
+    steps:
+      - name: secondJob script
+        shell: bash
+        run: echo "Hello World from second job"
